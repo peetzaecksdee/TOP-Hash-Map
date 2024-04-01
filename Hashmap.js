@@ -101,20 +101,47 @@ class HashMap {
 				keysArray.push(curr.key);
 				curr = curr.next;
 			}
-		})
+		});
 		return keysArray;
+	}
+	
+	values() {
+		let valuesArray = [];
+		this.hashMap.forEach((bucket) => {
+			let curr = bucket;
+			while (curr) {
+				valuesArray.push(curr.val);
+				curr = curr.next;
+			}
+		});
+		return valuesArray;
+	}
+
+	entries() {
+		let entriesArray = [];
+		this.hashMap.forEach((bucket) => {
+			let curr = bucket;
+			while (curr) {
+				entriesArray.push([curr.key, curr.val]);
+				curr = curr.next;
+			}
+		});
+		return entriesArray;
 	}
 }
 
 let hashMap = new HashMap();
 hashMap.set('a', 'cc');
 hashMap.set('bb', 'efg');
+hashMap.set('bb', 'haha');
 hashMap.set('hell', 'heaven');
 hashMap.set('better', 'good');
 console.log(hashMap.get('a'));
 console.log(hashMap.get('hell'));
 console.log(hashMap.length);
 console.log(hashMap.keys());
+console.log(hashMap.values());
+console.log(hashMap.entries());
 console.log(hashMap.remove('a'));
 console.log(hashMap.length);
 console.log(hashMap.remove('a'));
