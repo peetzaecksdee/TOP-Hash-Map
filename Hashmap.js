@@ -13,13 +13,13 @@ class HashMap {
 		this.size = 0;
 	}
 
-	*hash(key) {
+	hash(key) {
 		let hashCode = 0;
 
 		let primeNumber = 31;
 		for (let i = 0; i < key.length; i++) {
 			hashCode = primeNumber * hashCode + key.charCodeAt(i);
-			hashCode %= self.hashMap.length;
+			hashCode %= this.hashMap.length;
 		}
 
 		return hashCode;
@@ -31,7 +31,6 @@ class HashMap {
 		const code = this.hash(key);
 		const newNode = new Node(key, val);
 		if (this.hashMap[code] == null) {
-			this.size = 1;
 			this.hashMap[code] = newNode;
 		} else {
 			let curr = this.hashMap[code];
@@ -40,6 +39,7 @@ class HashMap {
 			}
 			curr.next = newNode;
 		}
+		this.size++;
 	}
 
 	isReachedLoadFactor() {
@@ -52,7 +52,7 @@ class HashMap {
 		this.size = 0;
 		oldMap.forEach((bucket) => {
 			let curr = bucket;
-			while (curr != null) {
+			while (curr) {
 				this.set(curr.key, curr.val);
 				curr = curr.next;
 			}
@@ -72,8 +72,51 @@ class HashMap {
 	has(key) {
 		return this.get(key) ? true : false;
 	}
+
+	remove(key) {
+		const code = this.hash(key);
+		let keyPlace = this.hashMap[code];
+		if (keyPlace) {
+			this.hashMap[code] = null;
+			this.size--;
+			return true;
+		}
+		return false;
+	}
+
+	get length() {
+		return this.size;
+	}
+
+	clear() {
+		this.hashMap = new Array(16);
+		this.size = 0;
+	}
+
+	keys() {
+		let keysArray = [];
+		this.hashMap.forEach((bucket) => {
+			let curr = bucket;
+			while (curr) {
+				keysArray.push(curr.key);
+				curr = curr.next;
+			}
+		})
+		return keysArray;
+	}
 }
 
 let hashMap = new HashMap();
 hashMap.set('a', 'cc');
+hashMap.set('bb', 'efg');
+hashMap.set('hell', 'heaven');
+hashMap.set('better', 'good');
 console.log(hashMap.get('a'));
+console.log(hashMap.get('hell'));
+console.log(hashMap.length);
+console.log(hashMap.keys());
+console.log(hashMap.remove('a'));
+console.log(hashMap.length);
+console.log(hashMap.remove('a'));
+hashMap.clear();
+console.log(hashMap.get('better'));
